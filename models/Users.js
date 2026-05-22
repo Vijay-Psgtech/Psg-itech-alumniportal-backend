@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema(
 
     password: {
       type: String,
-      required: true,
+      default: null,  // ✅ Can be null for social logins
     },
 
     role: {
@@ -36,6 +36,26 @@ const UserSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true,
+    },
+
+    // ✅ NEW: OAuth Fields
+    googleId: {
+      type: String,
+      default: null,
+      unique: true,
+      sparse: true,  // Allows multiple null values
+    },
+
+    facebookId: {
+      type: String,
+      default: null,
+      unique: true,
+      sparse: true,  // Allows multiple null values
+    },
+
+    profileImage: {
+      type: String,
+      default: null,
     },
   },
   { timestamps: true },

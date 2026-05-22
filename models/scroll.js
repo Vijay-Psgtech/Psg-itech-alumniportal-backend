@@ -17,6 +17,7 @@ const notificationSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: {
+        // ✅ FIXED: Added "success" type
         values: ["info", "success", "warning", "error"],
         message: "Type must be info, success, warning, or error",
       },
@@ -54,7 +55,7 @@ const notificationSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    collection: "notification_scrolls",  // ✅ Changed collection name too
+    collection: "notification_scrolls",
   }
 );
 
@@ -70,5 +71,5 @@ notificationSchema.query.active = function () {
   });
 };
 
-// ✅ FIXED: Changed model name from "Notification" to "NotificationScroll"
+// Model export
 module.exports = mongoose.model("NotificationScroll", notificationSchema);

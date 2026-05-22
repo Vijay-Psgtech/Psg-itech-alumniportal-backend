@@ -140,8 +140,8 @@ router.post("/", authMiddleware, superAdminMiddleware, async (req, res) => {
       title,
       message,
       type: type || "info",
-      expiresAt: expiresAt || null,
-      isActive: false, // Notifications start as inactive by default
+      expiresAt: expiresAt ? new Date(expiresAt) : null, // ✅ Default to null (never expires)
+      isActive: true, // ✅ CHANGED: Notifications start as ACTIVE by default
       displayOrder: 0,
       createdBy: req.user._id || req.user.id,
     });
@@ -150,7 +150,7 @@ router.post("/", authMiddleware, superAdminMiddleware, async (req, res) => {
     res.status(201).json({ 
       success: true, 
       data: notification,
-      message: "Notification created successfully"
+      message: "Notification created successfully and is now ACTIVE on banner!"
     });
   } catch (error) {
     console.error("Error creating notification:", error);
