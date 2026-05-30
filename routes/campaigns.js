@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const Campaign = require("../models/Campaign");
-const CampaignResponse = require("../models/CampaignResponse");
+const CampaignResponse = require("../models/Campaignresponse");
 
 // ==============================
 // ✅ SPECIFIC ROUTES FIRST

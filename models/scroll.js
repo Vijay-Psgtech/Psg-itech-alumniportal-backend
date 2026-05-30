@@ -35,7 +35,6 @@ const notificationSchema = new mongoose.Schema(
     expiresAt: {
       type: Date,
       default: null,
-      sparse: true,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
