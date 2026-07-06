@@ -42,6 +42,10 @@ app.get("/api/health", (_req, res) =>
   res.json({ message: "Server is running", status: "OK" }),
 );
 
+// ── Routes ───────────────────────────────────────────────────────
+// ── NEW: ALBUMS API (Create, Read, Update, Delete) ───────────────
+app.use("/api/albums", require("./routes/albums"));
+
 //--- Error Handler -------
 app.use((err, _req, res, _next) => {
   console.error("Unhandled error:", err);
