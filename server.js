@@ -43,6 +43,9 @@ app.get("/api/health", (_req, res) =>
 );
 
 // ── Routes ───────────────────────────────────────────────────────
+// Chapters must be mounted before /api/alumni, otherwise /api/alumni/:id catches /api/alumni/chapters
+app.use("/api/alumni/chapters", require("./routes/chapters"));
+
 // ── NEW: EVENTS API (Create, Read, Update, Delete) ───────────────
 app.use("/api/events", require("./routes/events"));
 
