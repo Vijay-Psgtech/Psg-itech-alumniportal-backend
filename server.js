@@ -43,6 +43,9 @@ app.get("/api/health", (_req, res) =>
 );
 
 // ── Routes ───────────────────────────────────────────────────────
+// ── NEW: EVENTS API (Create, Read, Update, Delete) ───────────────
+app.use("/api/events", require("./routes/events"));
+
 // ── NEW: ALBUMS API (Create, Read, Update, Delete) ───────────────
 app.use("/api/albums", require("./routes/albums"));
 
