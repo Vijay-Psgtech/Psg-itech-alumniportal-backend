@@ -2,7 +2,6 @@
 // ✅ Chapters Controller - FIXED with safe populate + lean queries
 
 const Chapter = require("../models/Chapter");
-const Alumni = require("../models/Alumni");
 const path = require("path");
 const fs = require("fs").promises;
 
@@ -23,10 +22,6 @@ const saveUploadedFile = async (file) => {
   await fs.writeFile(filepath, file.data);
   return `chapters/${filename}`;
 };
-
-/* ─────────────────────────────────────────
-   ALUMNI ENDPOINTS
-───────────────────────────────────────── */
 
 // Get all approved chapters
 exports.getChapters = async (req, res) => {
