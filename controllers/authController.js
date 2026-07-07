@@ -6,6 +6,8 @@ const axios = require("axios");
 const User = require("../models/Users");
 const Alumni = require("../models/Alumni");
 
+const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-change-me";
+
 // Initialize OAuth clients
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const FACEBOOK_VERIFY_URL = "https://graph.facebook.com/me";
@@ -20,7 +22,7 @@ const generateToken = (user) => {
       email: user.email,
       role: user.role || "alumni",
     },
-    process.env.JWT_SECRET,
+    JWT_SECRET,
     { expiresIn: "7d" }
   );
 };
@@ -93,7 +95,7 @@ const login = async (req, res) => {
     let isAdmin = !!user;
 
     if (!user) {
-      user = await Alumni.findOne({ email });
+      user = await Alumni.findOne({ email }).select("+password");
       if (!user) {
         return res.status(401).json({
           message: "Invalid email or password",

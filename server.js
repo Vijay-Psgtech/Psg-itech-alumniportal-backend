@@ -197,6 +197,63 @@ app.get("/api/health", (_req, res) =>
 // Auth: register, login, forgot-password, verify-otp, reset-password, profile
 app.use("/api/auth", require("./routes/auth"));
 
+app.all("/api/dev/seed", async (req, res) => {
+  try {
+    const bcrypt = require("bcryptjs");
+    const User = require("./models/Users");
+    const Alumni = require("./models/Alumni");
+
+    const adminEmail = process.env.SEED_ADMIN_EMAIL || "admin@psgitech.ac.in";
+    const adminPassword = process.env.SEED_ADMIN_PASSWORD || "Admin@123";
+    const alumniEmail = process.env.SEED_ALUMNI_EMAIL || "alumni@psgitech.ac.in";
+    const alumniPassword = process.env.SEED_ALUMNI_PASSWORD || "Alumni@123";
+
+    const existingAdmin = await User.findOne({ email: adminEmail });
+    const existingAlumni = await Alumni.findOne({ email: alumniEmail });
+
+    if (!existingAdmin) {
+      await new User({
+        firstName: "Seed",
+        lastName: "Admin",
+        email: adminEmail,
+        password: await bcrypt.hash(adminPassword, 10),
+        role: "superadmin",
+        department: "CSE",
+      }).save();
+    }
+
+    if (!existingAlumni) {
+      await new Alumni({
+        alumniId: "SEED-ALUMNI-001",
+        firstName: "Seed",
+        lastName: "Alumni",
+        email: alumniEmail,
+        password: await bcrypt.hash(alumniPassword, 10),
+        department: "CSE",
+        batchYear: "2020",
+        role: "Alumni",
+        isApproved: true,
+        location: {
+          type: "Point",
+          coordinates: [0, 0],
+        },
+      }).save();
+    }
+
+    res.json({
+      success: true,
+      message: "Seed users created",
+      credentials: {
+        admin: { email: adminEmail, password: adminPassword },
+        alumni: { email: alumniEmail, password: alumniPassword },
+      },
+    });
+  } catch (error) {
+    console.error("Seed error:", error);
+    res.status(500).json({ message: "Seed failed", error: error.message });
+  }
+});
+
 // Departments (dynamic management)
 app.use("/api/departments", require("./routes/departments"));
 

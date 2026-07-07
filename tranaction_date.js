@@ -24,17 +24,17 @@ let tranaction_date = function (data, config, res) {
     hashstring += "|" + config.salt;
     data.hash = sha512.sha512(hashstring);
     return (data.hash);
-  }
-
+  }  
+  
   checkArgumentValidation(data, config);
   hash_key_transaction_date = generateHash_transaction_date();
   let form = {
     'merchant_key': config.key,
     'merchant_email': data.merchant_email,
-    'transaction_date': data.transaction_date,
+    'transaction_date': data.transaction_date,    
     'hash': hash_key_transaction_date,
   }
-  base_url = util.get_base_url(config.env);
+  base_url = util.get_base_url(config.env);   
   if (base_url !== '') {
     call_url = base_url + 'transaction/v1/retrieve/date';
     util.call(call_url, form).then(function (data) {

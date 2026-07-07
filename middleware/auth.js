@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 
+const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-change-me";
+
 // ── Verify JWT token ─────────────────────────────────────────────
 const authMiddleware = (req, res, next) => {
   try {
@@ -15,7 +17,7 @@ const authMiddleware = (req, res, next) => {
 
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET
+      JWT_SECRET
     );
 
     req.user = decoded;
