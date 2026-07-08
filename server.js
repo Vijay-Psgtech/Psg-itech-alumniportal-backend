@@ -61,6 +61,9 @@ app.use("/api/albums", require("./routes/albums"));
 // ── NEW: NEWSLETTERS API (Create, Read, Update, Delete) ───────────────
 app.use("/api/newsletters", require("./routes/newsletters"));
 
+// User management (Admin only)
+app.use("/api/users", require("./routes/users"));
+
 
 //--- Error Handler -------
 app.use((err, _req, res, _next) => {
