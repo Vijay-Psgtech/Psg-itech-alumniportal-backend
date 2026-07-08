@@ -49,6 +49,9 @@ app.use("/api/departments", require("./routes/departments"));
 // Chapters must be mounted before /api/alumni, otherwise /api/alumni/:id catches /api/alumni/chapters
 app.use("/api/alumni/chapters", require("./routes/chapters"));
 
+// Alumni directory (public + protected profile update)
+app.use("/api/alumni", require("./routes/alumni"));
+
 // ── NEW: EVENTS API (Create, Read, Update, Delete) ───────────────
 app.use("/api/events", require("./routes/events"));
 
