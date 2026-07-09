@@ -55,6 +55,9 @@ app.use("/api/alumni/chapters", require("./routes/chapters"));
 // Alumni directory (public + protected profile update)
 app.use("/api/alumni", require("./routes/alumni"));
 
+// Admin simple routes (approve/reject/stats) — uses Alumni model + isAdmin flag
+app.use("/api/admin", require("./routes/admin"));
+
 // ── NEW: EVENTS API (Create, Read, Update, Delete) ───────────────
 app.use("/api/events", require("./routes/events"));
 
