@@ -43,6 +43,9 @@ app.get("/api/health", (_req, res) =>
 );
 
 // ── Routes ───────────────────────────────────────────────────────
+// Auth: register, login, forgot-password, verify-otp, reset-password, profile
+app.use("/api/auth", require("./routes/auth"));
+
 // ✅ NEW: DEPARTMENTS API (Dynamic departments management)
 app.use("/api/departments", require("./routes/departments"));
 
@@ -61,8 +64,14 @@ app.use("/api/albums", require("./routes/albums"));
 // ── NEW: NEWSLETTERS API (Create, Read, Update, Delete) ───────────────
 app.use("/api/newsletters", require("./routes/newsletters"));
 
+// Notifications (alumni submit + admin approve/reject)
+app.use("/api/notifications", require("./routes/notifications"));
+
 // User management (Admin only)
 app.use("/api/users", require("./routes/users"));
+
+// Campaign management (Admin only)
+app.use("/api/campaigns", require("./routes/campaigns"));
 
 
 //--- Error Handler -------
