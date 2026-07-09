@@ -67,6 +67,9 @@ app.use("/api/newsletters", require("./routes/newsletters"));
 // User management (Admin only)
 app.use("/api/users", require("./routes/users"));
 
+// Campaign management (Admin only)
+app.use("/api/campaigns", require("./routes/campaigns"));
+
 
 //--- Error Handler -------
 app.use((err, _req, res, _next) => {
