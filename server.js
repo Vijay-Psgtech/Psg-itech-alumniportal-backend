@@ -76,6 +76,8 @@ app.use("/api/users", require("./routes/users"));
 // Campaign management (Admin only)
 app.use("/api/campaigns", require("./routes/campaigns"));
 
+app.use("/api/donation", require("./routes/donation"));
+
 
 //--- Error Handler -------
 app.use((err, _req, res, _next) => {
