@@ -76,6 +76,9 @@ app.use("/api/users", require("./routes/users"));
 // Campaign management (Admin only)
 app.use("/api/campaigns", require("./routes/campaigns"));
 
+// Reports routes for admin
+app.use("/api/reports", require("./routes/adminReports"));
+
 app.use("/api/donation", require("./routes/donation"));
 
 
