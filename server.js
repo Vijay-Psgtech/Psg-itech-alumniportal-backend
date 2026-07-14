@@ -58,6 +58,9 @@ app.use("/api/alumni", require("./routes/alumni"));
 // Admin simple routes (approve/reject/stats) — uses Alumni model + isAdmin flag
 app.use("/api/admin", require("./routes/admin"));
 
+// Admin dashboard (full alumni mgmt + donations + stats)
+app.use("/api/admin/dashboard", require("./routes/adminDash"));
+
 // ── NEW: EVENTS API (Create, Read, Update, Delete) ───────────────
 app.use("/api/events", require("./routes/events"));
 
@@ -75,6 +78,9 @@ app.use("/api/users", require("./routes/users"));
 
 // Campaign management (Admin only)
 app.use("/api/campaigns", require("./routes/campaigns"));
+
+// Reports routes for admin
+app.use("/api/reports", require("./routes/adminReports"));
 
 app.use("/api/donation", require("./routes/donation"));
 
