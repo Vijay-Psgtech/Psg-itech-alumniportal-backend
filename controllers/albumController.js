@@ -39,7 +39,7 @@ exports.getAlbumByYear = async (req, res) => {
       year,
       coverColor: "#667eea",
       totalPhotos: albums.reduce((s, a) => s + a.photos, 0),
-      totalEvents: albums.length,
+      totalEvents: albums.length,                  
       albums,
     };
 

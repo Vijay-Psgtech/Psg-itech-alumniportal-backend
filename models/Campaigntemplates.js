@@ -186,6 +186,7 @@ const CAMPAIGN_TEMPLATES = {
         required: false,
       },
       {
+        
         fieldId: "website",
         fieldName: "website",
         fieldType: "text",

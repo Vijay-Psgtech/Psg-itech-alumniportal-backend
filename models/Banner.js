@@ -22,7 +22,7 @@ const bannerSchema = new mongoose.Schema(
     },
     backgroundImage: {
       type: String,
-      default: "https://via.placeholder.com/1600x900",
+      default: "client\\src\\assets\\t1725016098_OVsmN6OAPi.jpg",
     },
     features: [
       {
