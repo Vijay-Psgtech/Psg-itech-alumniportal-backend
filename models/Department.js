@@ -21,11 +21,6 @@ const departmentSchema = new mongoose.Schema(
       enum: ["UG", "PG"],
       required: [true, "Programme type is required"],
     },
-    fundingType: {
-      type: String,
-      enum: ["Aided", "SF"],
-      required: [true, "Funding type is required"],
-    },
     description: {
       type: String,
       trim: true,
@@ -47,7 +42,7 @@ const departmentSchema = new mongoose.Schema(
 );
 
 // Index for faster queries
-departmentSchema.index({ programmeType: 1, fundingType: 1 });
+departmentSchema.index({ programmeType: 1 });
 departmentSchema.index({ active: 1 });
 departmentSchema.index({ createdBy: 1 });
 

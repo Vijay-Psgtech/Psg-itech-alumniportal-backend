@@ -35,6 +35,6 @@ router.get("/", getAllDepartments);
 
 // Get departments by programme and funding type
 // NOTE: This must come AFTER /admin/all to avoid route conflict
-router.get("/:programmeType/:fundingType", getDepartmentsByType);
+router.get("/:programmeType", getDepartmentsByType);
 
 module.exports = router;

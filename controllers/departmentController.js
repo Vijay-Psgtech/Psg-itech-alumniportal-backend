@@ -5,15 +5,15 @@ const Department = require("../models/Department");
 // ── PUBLIC: GET ALL ACTIVE DEPARTMENTS ──
 exports.getAllDepartments = async (req, res) => {
   try {
-    const { programmeType, fundingType } = req.query;
+    const { programmeType } = req.query;
 
     let filter = { active: true };
 
     if (programmeType) filter.programmeType = programmeType;
-    if (fundingType) filter.fundingType = fundingType;
+
 
     const departments = await Department.find(filter)
-      .select("name degree programmeType fundingType")
+      .select("name degree programmeType")
       .sort("name");
 
     res.json({
@@ -34,18 +34,17 @@ exports.getAllDepartments = async (req, res) => {
 // ── PUBLIC: GET DEPARTMENTS BY PROGRAMME AND FUNDING TYPE ──
 exports.getDepartmentsByType = async (req, res) => {
   try {
-    const { programmeType, fundingType } = req.params;
+    const { programmeType } = req.params;
 
-    if (!programmeType || !fundingType) {
+    if (!programmeType) {
       return res.status(400).json({
         success: false,
-        message: "Programme type and funding type are required",
+        message: "Programme type is required",
       });
     }
 
     const departments = await Department.find({
       programmeType,
-      fundingType,
       active: true,
     })
       .select("name degree")
@@ -69,7 +68,7 @@ exports.getDepartmentsByType = async (req, res) => {
 // ── ADMIN: CREATE DEPARTMENT ──
 exports.createDepartment = async (req, res) => {
   try {
-    const { name, degree, programmeType, fundingType, description } = req.body;
+    const { name, degree, programmeType, description } = req.body;
     // ✅ FIX: Check for _id (set by authMiddleware)
     if (!req.user || !req.user._id) {
       console.error("❌ User not authenticated. req.user:", req.user);
@@ -80,25 +79,18 @@ exports.createDepartment = async (req, res) => {
     }
 
     // Validation
-    if (!name || !degree || !programmeType || !fundingType) {
+    if (!name || !degree || !programmeType) {
       return res.status(400).json({
         success: false,
-        message: "Name, degree, programme type, and funding type are required",
+        message: "Name, degree, and programme type are required",
       });
     }
 
-    // Validate programmeType and fundingType values
+    // Validate programmeType  values
     if (!["UG", "PG"].includes(programmeType)) {
       return res.status(400).json({
         success: false,
         message: "Programme type must be either 'UG' or 'PG'",
-      });
-    }
-
-    if (!["Aided", "SF"].includes(fundingType)) {
-      return res.status(400).json({
-        success: false,
-        message: "Funding type must be either 'Aided' or 'SF'",
       });
     }
 
@@ -115,7 +107,6 @@ exports.createDepartment = async (req, res) => {
       name: name.trim(),
       degree: degree.trim(),
       programmeType,
-      fundingType,
       description: description?.trim() || "",
       createdBy: req.user._id,  // ✅ FIX: Uses _id
     });
@@ -145,7 +136,7 @@ exports.createDepartment = async (req, res) => {
 exports.updateDepartment = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, degree, programmeType, fundingType, description, active } =
+    const { name, degree, programmeType, description, active } =
       req.body;
 
     const department = await Department.findById(id);
@@ -175,18 +166,11 @@ exports.updateDepartment = async (req, res) => {
       });
     }
 
-    if (fundingType && !["Aided", "SF"].includes(fundingType)) {
-      return res.status(400).json({
-        success: false,
-        message: "Funding type must be either 'Aided' or 'SF'",
-      });
-    }
 
     // Update fields
     if (name) department.name = name.trim();
     if (degree) department.degree = degree.trim();
     if (programmeType) department.programmeType = programmeType;
-    if (fundingType) department.fundingType = fundingType;
     if (description !== undefined) department.description = description.trim();
     if (active !== undefined) department.active = active;
 
