@@ -6,7 +6,7 @@ exports.generateAlumniId = async (req, res, next) => {
     const counter = await Counter.findOneAndUpdate(
       { name: "alumniId" },
       { $inc: { seq: 1 } },
-      { new: true, upsert: true }, // Create the document if it doesn't exist
+      { returnDocument: "after", upsert: true }, // Create the document if it doesn't exist
     );
     const alumniId = `PSGiTech-ALUM-${counter.seq.toString().padStart(6, "0")}`;
     req.alumniId = alumniId; // Attach the generated alumniId to the request object

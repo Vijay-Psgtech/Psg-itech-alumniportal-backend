@@ -110,7 +110,7 @@ exports.verifyRazorPay = async (req, res) => {
         transactionId: razorpay_payment_id,
         completedAt: new Date(),
       },
-      { new: true }
+      { returnDocument: "after" }
     );
 
     if (!donation) {
