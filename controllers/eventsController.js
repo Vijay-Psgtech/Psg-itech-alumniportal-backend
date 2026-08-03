@@ -166,3 +166,16 @@ exports.deleteEvent = async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to delete event" });
   }
 };
+
+exports.getRecentEvents = async (req, res) => {
+  try {
+    const recentEvents = await Event.find()
+      .sort({ createdAt: -1 })
+      .limit(6);
+    res.json({ success: true, data: recentEvents });
+  } catch (error) {
+    console.error("Error fetching recent events:", error);
+    res.status(500).json({ success: false, message: "Failed to fetch recent events" });
+  }
+};
+
