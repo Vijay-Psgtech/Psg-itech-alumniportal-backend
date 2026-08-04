@@ -3,18 +3,32 @@ const path = require("path");
 const fs = require("fs");
 const Album = require("../models/Album");
 
+const sanitizeAlbumFolderName = (title) => {
+  if (!title) {
+    return "album";
+  }
+
+  return (
+    String(title)
+      .trim()
+      .replace(/[<>:"/\\|?*\x00-\x1f]+/g, "-")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "") || "album"
+  );
+};
+
 // Albums multiple image upload configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const createFolder = (title) => {
       if (!title) {
-        return cb(
-          new Error("Missing album identifier for upload destination"),
-        );
+        return cb(new Error("Missing album identifier for upload destination"));
       }
-      const folder = `uploads/albums/${title}/`;
+      const safeTitle = sanitizeAlbumFolderName(title);
+      const folder = `uploads/albums/${safeTitle}/`;
       fs.mkdirSync(folder, { recursive: true });
-      req.albumTitle = title;
+      req.albumTitle = safeTitle;
       cb(null, folder);
     };
     if (req.body?.title) {
@@ -54,4 +68,5 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 });
 
+upload.santizeAlbumFolderName = sanitizeAlbumFolderName;
 module.exports = upload;
