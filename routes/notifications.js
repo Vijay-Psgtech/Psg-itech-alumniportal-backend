@@ -63,14 +63,7 @@ router.post(
   "/",
   authMiddleware,
   upload.single("attachment"),
-  createNotification,
-);
-
-router.post(
-  "/",
-  authMiddleware,
-  upload.single("attachment"),
-  handleMulterError, // ✅ ADD THIS
+  handleMulterError,
   createNotification,
 );
 
