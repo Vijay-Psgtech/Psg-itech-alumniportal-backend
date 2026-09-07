@@ -1,0 +1,116 @@
+const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const dotenv = require("dotenv");
+dotenv.config();
+const connectDB = require("./config/db");
+
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+  throw new Error("JWT_SECRET must be set to a random value of at least 32 characters");
+}
+
+const app = express();
+
+app.disable("x-powered-by");
+app.use(helmet());
+
+connectDB();
+
+//--CORS---
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5000",
+  "http://localhost:5100",
+  "http://localhost:5200",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: false, limit: "1mb" }));
+app.use(cookieParser());
+app.use("/uploads", express.static("uploads"));
+
+//--- Health Check API -------
+app.get("/api/health", (_req, res) =>
+  res.json({ message: "Server is running", status: "OK" }),
+);
+
+// ── Routes ───────────────────────────────────────────────────────
+// Auth: register, login, forgot-password, verify-otp, reset-password, profile
+app.use("/api/auth", require("./routes/auth"));
+
+// ✅ NEW: DEPARTMENTS API (Dynamic departments management)
+app.use("/api/departments", require("./routes/departments"));
+
+// Chapters must be mounted before /api/alumni, otherwise /api/alumni/:id catches /api/alumni/chapters
+app.use("/api/alumni/chapters", require("./routes/chapters"));
+
+// Alumni directory (public + protected profile update)
+app.use("/api/alumni", require("./routes/alumni"));
+
+// Admin simple routes (approve/reject/stats) — uses Alumni model + isAdmin flag
+app.use("/api/admin", require("./routes/admin"));
+
+// Admin dashboard (full alumni mgmt + donations + stats)
+app.use("/api/admin/dashboard", require("./routes/adminDash"));
+
+// ── NEW: EVENTS API (Create, Read, Update, Delete) ───────────────
+app.use("/api/events", require("./routes/events"));
+
+// ── NEW: ALBUMS API (Create, Read, Update, Delete) ───────────────
+app.use("/api/albums", require("./routes/albums"));
+
+// ── NEW: NEWSLETTERS API (Create, Read, Update, Delete) ───────────────
+app.use("/api/newsletters", require("./routes/newsletters"));
+
+// Notifications (alumni submit + admin approve/reject)
+app.use("/api/notifications", require("./routes/notifications"));
+
+// User management (Admin only)
+app.use("/api/users", require("./routes/users"));
+
+// Campaign management (Admin only)
+app.use("/api/campaigns", require("./routes/campaigns"));
+
+// Mailing management (Admin only)
+app.use("/api/mailings", require("./routes/mailings"));
+
+// Flash mentorship administration
+app.use("/api/mentorship", require("./routes/mentorship"));
+
+// Authenticated individual messaging
+app.use("/api/messages", require("./routes/messages"));
+
+// Reports routes for admin
+app.use("/api/reports", require("./routes/adminReports"));
+
+app.use("/api/donation", require("./routes/donation"));
+
+
+//--- Error Handler -------
+app.use((err, _req, res, _next) => {
+  console.error("Unhandled error:", err);
+  const status = err.status || (err.name === "MulterError" ? 400 : 500);
+  res.status(status).json({ message: status >= 500 ? "Internal server error" : (err.message || "Request failed") });
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`\n🚀 PSG iTech Alumni Backend running on port ${PORT}`);
+});
