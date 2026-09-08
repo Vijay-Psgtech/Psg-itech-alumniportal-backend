@@ -87,6 +87,11 @@ app.use("/api/donation", require("./routes/donation"));
 // Flash mentorship administration
 app.use("/api/mentorship", require("./routes/mentorship"));
 
+// Mailing management (Admin only)
+app.use("/api/mailings", require("./routes/mailings"));
+
+// Authenticated individual messaging
+app.use("/api/messages", require("./routes/messages"));
 
 //--- Error Handler -------
 app.use((err, _req, res, _next) => {
