@@ -84,6 +84,9 @@ app.use("/api/reports", require("./routes/adminReports"));
 
 app.use("/api/donation", require("./routes/donation"));
 
+// Flash mentorship administration
+app.use("/api/mentorship", require("./routes/mentorship"));
+
 
 //--- Error Handler -------
 app.use((err, _req, res, _next) => {
