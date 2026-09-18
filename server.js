@@ -16,6 +16,7 @@ const allowedOrigins = [
   "http://localhost:5000",
   "http://localhost:5100",
   "http://localhost:5200",
+  "https://alumnitest.psginstitutions.in",
 ];
 
 app.use(
